@@ -7,6 +7,12 @@
 
 #include "6axis.h"
 
+extern I2C_HandleTypeDef hi2c1;
+extern UART_HandleTypeDef huart2;
+
+
+
+
 void check_device_communication() {
     uint8_t deviceID = 0;
     HAL_StatusTypeDef status;

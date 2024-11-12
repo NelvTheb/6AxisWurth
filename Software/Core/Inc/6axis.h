@@ -10,6 +10,7 @@
 
 #include <stdio.h>
 #include <stdint.h>
+#include "main.h"
 
 #define SENSOR_ADDRESS  0x6B << 1
 #define CTRL1_XL 0x10
@@ -28,5 +29,6 @@
 void check_device_communication();
 void Init_HighPerf_Mode_6_axis(void);
 void Display_6_axis_data(void);
+HAL_StatusTypeDef Read_sensor_data();
 
 #endif /* INC_6AXIS_H_ */
