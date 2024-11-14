@@ -59,7 +59,7 @@ void Init_HighPerf_Mode_6_axis(void)
         HAL_I2C_Mem_Read(&hi2c1, SENSOR_ADDRESS, STATUS_REG, I2C_MEMADD_SIZE_8BIT, &status, 1, HAL_MAX_DELAY);
 
         if (status & 0x01) {
-            printf("Les données de l'accéléromètre sont prêtes. q\r\n");
+            printf("Les données de l'accéléromètre sont prêtes.\r\n");
         }
         if (status & 0x02) {
             printf("Les données du gyroscope sont prêtes.\r\n");
@@ -77,9 +77,9 @@ HAL_StatusTypeDef Read_sensor_data(int16_t* accel_data, int16_t* gyro_data) {
     if (status != HAL_OK) return status;
 
     // Vérifier si les bits XLDA (bit 0) et GDA (bit 1) sont à 1
-    if (!(status_reg & 0x01) || !(status_reg & 0x02)) {
+    if ((status_reg & 0x01) & (status_reg & 0x02)) {
         // Pas de nouvelles données prêtes
-        return HAL_ERROR;
+        return HAL_OK;
     }
 	// Lire les données du gyroscope
 	for (int i = 0; i < 3; i++) {
@@ -96,7 +96,7 @@ HAL_StatusTypeDef Read_sensor_data(int16_t* accel_data, int16_t* gyro_data) {
 		if (status != HAL_OK) return status;
 
 		// Combiner les octets pour obtenir la valeur 16 bits
-		gyro_data[i] = (int16_t)((high_byte << 8) | low_byte);
+		gyro_data[i] = (int16_t)((high_byte << 8) | low_byte) * GYRO_SENSITIVITY_2000DPS;
 	}
 	// Lire les données de l'accéléromètre
 	for (int i = 0; i < 3; i++) {
@@ -113,7 +113,7 @@ HAL_StatusTypeDef Read_sensor_data(int16_t* accel_data, int16_t* gyro_data) {
 		if (status != HAL_OK) return status;
 
 		// Combiner les octets pour obtenir la valeur 16 bits
-		accel_data[i] = (int16_t)((high_byte << 8) | low_byte);
+		accel_data[i] = (int16_t)((high_byte << 8) | low_byte) * ACC_SENSITIVITY_16G;
 	}
 
 	return HAL_OK;
