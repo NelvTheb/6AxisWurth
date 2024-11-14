@@ -19,10 +19,9 @@
 #define CTRL6_C  0x15
 #define CTRL7_G  0x16
 #define CTRL8_XL 0x17
-#define STATUS_REG 0x1E
+#define STATUS_REG 0x1E //Registres pour mesures prêtes
 #define G_X_OUT_L 0x22             // Adresse du premier registre de sortie gyroscope (G_)
 #define XL_X_OUT_L 0x28            // Adresse du premier registre de sortie accéléromètre (XL_)
-// Sensibilités pour accéléromètre et gyroscope
 #define ACC_SENSITIVITY_16G 0.488 // Sensibilité pour ±16g
 #define GYRO_SENSITIVITY_2000DPS 70 // Sensibilité pour ±2000 dps
 

@@ -7,45 +7,45 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, ALLOC, LOAD, READONLY, DATA
   1 .text         0000ada4  08000190  08000190  00001190  2**4
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  2 .rodata       0000056c  0800af38  0800af38  0000bf38  2**3
+  2 .rodata       0000057c  0800af38  0800af38  0000bf38  2**3
                   CONTENTS, ALLOC, LOAD, READONLY, DATA
-  3 .ARM.extab    00000000  0800b4a4  0800b4a4  0000d1d4  2**0
+  3 .ARM.extab    00000000  0800b4b4  0800b4b4  0000d1d4  2**0
                   CONTENTS
-  4 .ARM          00000008  0800b4a4  0800b4a4  0000c4a4  2**2
+  4 .ARM          00000008  0800b4b4  0800b4b4  0000c4b4  2**2
                   CONTENTS, ALLOC, LOAD, READONLY, DATA
-  5 .preinit_array 00000000  0800b4ac  0800b4ac  0000d1d4  2**0
+  5 .preinit_array 00000000  0800b4bc  0800b4bc  0000d1d4  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  6 .init_array   00000004  0800b4ac  0800b4ac  0000c4ac  2**2
+  6 .init_array   00000004  0800b4bc  0800b4bc  0000c4bc  2**2
                   CONTENTS, ALLOC, LOAD, READONLY, DATA
-  7 .fini_array   00000004  0800b4b0  0800b4b0  0000c4b0  2**2
+  7 .fini_array   00000004  0800b4c0  0800b4c0  0000c4c0  2**2
                   CONTENTS, ALLOC, LOAD, READONLY, DATA
-  8 .data         000001d4  20000000  0800b4b4  0000d000  2**2
+  8 .data         000001d4  20000000  0800b4c4  0000d000  2**2
                   CONTENTS, ALLOC, LOAD, DATA
-  9 .bss          00000298  200001d4  0800b688  0000d1d4  2**2
+  9 .bss          00000298  200001d4  0800b698  0000d1d4  2**2
                   ALLOC
- 10 ._user_heap_stack 00000604  2000046c  0800b688  0000d46c  2**0
+ 10 ._user_heap_stack 00000604  2000046c  0800b698  0000d46c  2**0
                   ALLOC
  11 .ARM.attributes 00000030  00000000  00000000  0000d1d4  2**0
                   CONTENTS, READONLY
- 12 .debug_info   000150bf  00000000  00000000  0000d204  2**0
+ 12 .debug_info   000150a2  00000000  00000000  0000d204  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 13 .debug_abbrev 00002e90  00000000  00000000  000222c3  2**0
+ 13 .debug_abbrev 00002e5b  00000000  00000000  000222a6  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 14 .debug_aranges 00001328  00000000  00000000  00025158  2**3
+ 14 .debug_aranges 00001328  00000000  00000000  00025108  2**3
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 15 .debug_rnglists 00000eef  00000000  00000000  00026480  2**0
+ 15 .debug_rnglists 00000eef  00000000  00000000  00026430  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 16 .debug_macro  00028f3c  00000000  00000000  0002736f  2**0
+ 16 .debug_macro  00029027  00000000  00000000  0002731f  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 17 .debug_line   000187bf  00000000  00000000  000502ab  2**0
+ 17 .debug_line   0001892b  00000000  00000000  00050346  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 18 .debug_str    000f7430  00000000  00000000  00068a6a  2**0
+ 18 .debug_str    000f7430  00000000  00000000  00068c71  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 19 .comment      00000043  00000000  00000000  0015fe9a  2**0
+ 19 .comment      00000043  00000000  00000000  001600a1  2**0
                   CONTENTS, READONLY
- 20 .debug_frame  0000659c  00000000  00000000  0015fee0  2**2
+ 20 .debug_frame  0000659c  00000000  00000000  001600e4  2**2
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 21 .debug_line_str 0000006a  00000000  00000000  0016647c  2**0
+ 21 .debug_line_str 0000006a  00000000  00000000  00166680  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
 
 Disassembly of section .text:
@@ -1561,212 +1561,213 @@ HAL_StatusTypeDef Read_sensor_data(int16_t* accel_data, int16_t* gyro_data) {
  8001174:	2b00      	cmp	r3, #0
  8001176:	d001      	beq.n	800117c <Read_sensor_data+0x34>
  8001178:	7bfb      	ldrb	r3, [r7, #15]
- 800117a:	e0ac      	b.n	80012d6 <Read_sensor_data+0x18e>
-    if ((status_reg & 0x01) & (status_reg & 0x02)) {
+ 800117a:	e0ad      	b.n	80012d8 <Read_sensor_data+0x190>
+
+    // Vérifier si les bits XLDA (bit 0) et GDA (bit 1) sont à 1
+    if (!(status_reg & 0x01) & !(status_reg & 0x02)) {
+ 800117c:	7abb      	ldrb	r3, [r7, #10]
+ 800117e:	f003 0303 	and.w	r3, r3, #3
+ 8001182:	2b00      	cmp	r3, #0
+ 8001184:	d101      	bne.n	800118a <Read_sensor_data+0x42>
         // Pas de nouvelles données prêtes
-        return HAL_OK;
+        return HAL_ERROR;
+ 8001186:	2301      	movs	r3, #1
+ 8001188:	e0a6      	b.n	80012d8 <Read_sensor_data+0x190>
     }
 	// Lire les données du gyroscope
 	for (int i = 0; i < 3; i++) {
- 800117c:	2300      	movs	r3, #0
- 800117e:	617b      	str	r3, [r7, #20]
- 8001180:	e04c      	b.n	800121c <Read_sensor_data+0xd4>
+ 800118a:	2300      	movs	r3, #0
+ 800118c:	617b      	str	r3, [r7, #20]
+ 800118e:	e049      	b.n	8001224 <Read_sensor_data+0xdc>
 		// Adresses des registres pour chaque axe
 		uint8_t low_addr = G_X_OUT_L + i * 2;
- 8001182:	697b      	ldr	r3, [r7, #20]
- 8001184:	3311      	adds	r3, #17
- 8001186:	b2db      	uxtb	r3, r3
- 8001188:	005b      	lsls	r3, r3, #1
- 800118a:	733b      	strb	r3, [r7, #12]
+ 8001190:	697b      	ldr	r3, [r7, #20]
+ 8001192:	3311      	adds	r3, #17
+ 8001194:	b2db      	uxtb	r3, r3
+ 8001196:	005b      	lsls	r3, r3, #1
+ 8001198:	733b      	strb	r3, [r7, #12]
 		uint8_t high_addr = low_addr + 1;
- 800118c:	7b3b      	ldrb	r3, [r7, #12]
- 800118e:	3301      	adds	r3, #1
- 8001190:	72fb      	strb	r3, [r7, #11]
+ 800119a:	7b3b      	ldrb	r3, [r7, #12]
+ 800119c:	3301      	adds	r3, #1
+ 800119e:	72fb      	strb	r3, [r7, #11]
 
 		// Lire l'octet bas
 		status = HAL_I2C_Mem_Read(&hi2c1, SENSOR_ADDRESS, low_addr, I2C_MEMADD_SIZE_8BIT, &low_byte, 1, HAL_MAX_DELAY);
- 8001192:	7b3b      	ldrb	r3, [r7, #12]
- 8001194:	b29a      	uxth	r2, r3
- 8001196:	f04f 33ff 	mov.w	r3, #4294967295	@ 0xffffffff
- 800119a:	9302      	str	r3, [sp, #8]
- 800119c:	2301      	movs	r3, #1
- 800119e:	9301      	str	r3, [sp, #4]
- 80011a0:	f107 0309 	add.w	r3, r7, #9
- 80011a4:	9300      	str	r3, [sp, #0]
- 80011a6:	2301      	movs	r3, #1
- 80011a8:	21d6      	movs	r1, #214	@ 0xd6
- 80011aa:	484f      	ldr	r0, [pc, #316]	@ (80012e8 <Read_sensor_data+0x1a0>)
- 80011ac:	f001 fa4c 	bl	8002648 <HAL_I2C_Mem_Read>
- 80011b0:	4603      	mov	r3, r0
- 80011b2:	73fb      	strb	r3, [r7, #15]
+ 80011a0:	7b3b      	ldrb	r3, [r7, #12]
+ 80011a2:	b29a      	uxth	r2, r3
+ 80011a4:	f04f 33ff 	mov.w	r3, #4294967295	@ 0xffffffff
+ 80011a8:	9302      	str	r3, [sp, #8]
+ 80011aa:	2301      	movs	r3, #1
+ 80011ac:	9301      	str	r3, [sp, #4]
+ 80011ae:	f107 0309 	add.w	r3, r7, #9
+ 80011b2:	9300      	str	r3, [sp, #0]
+ 80011b4:	2301      	movs	r3, #1
+ 80011b6:	21d6      	movs	r1, #214	@ 0xd6
+ 80011b8:	484b      	ldr	r0, [pc, #300]	@ (80012e8 <Read_sensor_data+0x1a0>)
+ 80011ba:	f001 fa45 	bl	8002648 <HAL_I2C_Mem_Read>
+ 80011be:	4603      	mov	r3, r0
+ 80011c0:	73fb      	strb	r3, [r7, #15]
 		if (status != HAL_OK) return status;
- 80011b4:	7bfb      	ldrb	r3, [r7, #15]
- 80011b6:	2b00      	cmp	r3, #0
- 80011b8:	d001      	beq.n	80011be <Read_sensor_data+0x76>
- 80011ba:	7bfb      	ldrb	r3, [r7, #15]
- 80011bc:	e08b      	b.n	80012d6 <Read_sensor_data+0x18e>
+ 80011c2:	7bfb      	ldrb	r3, [r7, #15]
+ 80011c4:	2b00      	cmp	r3, #0
+ 80011c6:	d001      	beq.n	80011cc <Read_sensor_data+0x84>
+ 80011c8:	7bfb      	ldrb	r3, [r7, #15]
+ 80011ca:	e085      	b.n	80012d8 <Read_sensor_data+0x190>
 
 		// Lire l'octet haut
 		status = HAL_I2C_Mem_Read(&hi2c1, SENSOR_ADDRESS, high_addr, I2C_MEMADD_SIZE_8BIT, &high_byte, 1, HAL_MAX_DELAY);
- 80011be:	7afb      	ldrb	r3, [r7, #11]
- 80011c0:	b29a      	uxth	r2, r3
- 80011c2:	f04f 33ff 	mov.w	r3, #4294967295	@ 0xffffffff
- 80011c6:	9302      	str	r3, [sp, #8]
- 80011c8:	2301      	movs	r3, #1
- 80011ca:	9301      	str	r3, [sp, #4]
- 80011cc:	f107 0308 	add.w	r3, r7, #8
- 80011d0:	9300      	str	r3, [sp, #0]
- 80011d2:	2301      	movs	r3, #1
- 80011d4:	21d6      	movs	r1, #214	@ 0xd6
- 80011d6:	4844      	ldr	r0, [pc, #272]	@ (80012e8 <Read_sensor_data+0x1a0>)
- 80011d8:	f001 fa36 	bl	8002648 <HAL_I2C_Mem_Read>
- 80011dc:	4603      	mov	r3, r0
- 80011de:	73fb      	strb	r3, [r7, #15]
+ 80011cc:	7afb      	ldrb	r3, [r7, #11]
+ 80011ce:	b29a      	uxth	r2, r3
+ 80011d0:	f04f 33ff 	mov.w	r3, #4294967295	@ 0xffffffff
+ 80011d4:	9302      	str	r3, [sp, #8]
+ 80011d6:	2301      	movs	r3, #1
+ 80011d8:	9301      	str	r3, [sp, #4]
+ 80011da:	f107 0308 	add.w	r3, r7, #8
+ 80011de:	9300      	str	r3, [sp, #0]
+ 80011e0:	2301      	movs	r3, #1
+ 80011e2:	21d6      	movs	r1, #214	@ 0xd6
+ 80011e4:	4840      	ldr	r0, [pc, #256]	@ (80012e8 <Read_sensor_data+0x1a0>)
+ 80011e6:	f001 fa2f 	bl	8002648 <HAL_I2C_Mem_Read>
+ 80011ea:	4603      	mov	r3, r0
+ 80011ec:	73fb      	strb	r3, [r7, #15]
 		if (status != HAL_OK) return status;
- 80011e0:	7bfb      	ldrb	r3, [r7, #15]
- 80011e2:	2b00      	cmp	r3, #0
- 80011e4:	d001      	beq.n	80011ea <Read_sensor_data+0xa2>
- 80011e6:	7bfb      	ldrb	r3, [r7, #15]
- 80011e8:	e075      	b.n	80012d6 <Read_sensor_data+0x18e>
+ 80011ee:	7bfb      	ldrb	r3, [r7, #15]
+ 80011f0:	2b00      	cmp	r3, #0
+ 80011f2:	d001      	beq.n	80011f8 <Read_sensor_data+0xb0>
+ 80011f4:	7bfb      	ldrb	r3, [r7, #15]
+ 80011f6:	e06f      	b.n	80012d8 <Read_sensor_data+0x190>
 
 		// Combiner les octets pour obtenir la valeur 16 bits
-		gyro_data[i] = (int16_t)((high_byte << 8) | low_byte) * GYRO_SENSITIVITY_2000DPS;
- 80011ea:	7a3b      	ldrb	r3, [r7, #8]
- 80011ec:	021b      	lsls	r3, r3, #8
- 80011ee:	b21a      	sxth	r2, r3
- 80011f0:	7a7b      	ldrb	r3, [r7, #9]
- 80011f2:	b21b      	sxth	r3, r3
- 80011f4:	4313      	orrs	r3, r2
- 80011f6:	b21b      	sxth	r3, r3
- 80011f8:	b29b      	uxth	r3, r3
- 80011fa:	461a      	mov	r2, r3
- 80011fc:	0092      	lsls	r2, r2, #2
- 80011fe:	4413      	add	r3, r2
- 8001200:	461a      	mov	r2, r3
- 8001202:	00d2      	lsls	r2, r2, #3
- 8001204:	1ad3      	subs	r3, r2, r3
- 8001206:	005b      	lsls	r3, r3, #1
- 8001208:	b299      	uxth	r1, r3
- 800120a:	697b      	ldr	r3, [r7, #20]
- 800120c:	005b      	lsls	r3, r3, #1
- 800120e:	683a      	ldr	r2, [r7, #0]
- 8001210:	4413      	add	r3, r2
- 8001212:	b20a      	sxth	r2, r1
- 8001214:	801a      	strh	r2, [r3, #0]
+		gyro_data[i] = (int16_t)(((high_byte << 8) | low_byte) * GYRO_SENSITIVITY_2000DPS);
+ 80011f8:	7a3b      	ldrb	r3, [r7, #8]
+ 80011fa:	021b      	lsls	r3, r3, #8
+ 80011fc:	7a7a      	ldrb	r2, [r7, #9]
+ 80011fe:	4313      	orrs	r3, r2
+ 8001200:	b29b      	uxth	r3, r3
+ 8001202:	461a      	mov	r2, r3
+ 8001204:	0092      	lsls	r2, r2, #2
+ 8001206:	4413      	add	r3, r2
+ 8001208:	461a      	mov	r2, r3
+ 800120a:	00d2      	lsls	r2, r2, #3
+ 800120c:	1ad3      	subs	r3, r2, r3
+ 800120e:	005b      	lsls	r3, r3, #1
+ 8001210:	b299      	uxth	r1, r3
+ 8001212:	697b      	ldr	r3, [r7, #20]
+ 8001214:	005b      	lsls	r3, r3, #1
+ 8001216:	683a      	ldr	r2, [r7, #0]
+ 8001218:	4413      	add	r3, r2
+ 800121a:	b20a      	sxth	r2, r1
+ 800121c:	801a      	strh	r2, [r3, #0]
 	for (int i = 0; i < 3; i++) {
- 8001216:	697b      	ldr	r3, [r7, #20]
- 8001218:	3301      	adds	r3, #1
- 800121a:	617b      	str	r3, [r7, #20]
- 800121c:	697b      	ldr	r3, [r7, #20]
- 800121e:	2b02      	cmp	r3, #2
- 8001220:	ddaf      	ble.n	8001182 <Read_sensor_data+0x3a>
+ 800121e:	697b      	ldr	r3, [r7, #20]
+ 8001220:	3301      	adds	r3, #1
+ 8001222:	617b      	str	r3, [r7, #20]
+ 8001224:	697b      	ldr	r3, [r7, #20]
+ 8001226:	2b02      	cmp	r3, #2
+ 8001228:	ddb2      	ble.n	8001190 <Read_sensor_data+0x48>
 	}
 	// Lire les données de l'accéléromètre
 	for (int i = 0; i < 3; i++) {
- 8001222:	2300      	movs	r3, #0
- 8001224:	613b      	str	r3, [r7, #16]
- 8001226:	e052      	b.n	80012ce <Read_sensor_data+0x186>
+ 800122a:	2300      	movs	r3, #0
+ 800122c:	613b      	str	r3, [r7, #16]
+ 800122e:	e04f      	b.n	80012d0 <Read_sensor_data+0x188>
 		// Adresses des registres pour chaque axe
 		uint8_t low_addr = XL_X_OUT_L + i * 2;
- 8001228:	693b      	ldr	r3, [r7, #16]
- 800122a:	3314      	adds	r3, #20
- 800122c:	b2db      	uxtb	r3, r3
- 800122e:	005b      	lsls	r3, r3, #1
- 8001230:	73bb      	strb	r3, [r7, #14]
+ 8001230:	693b      	ldr	r3, [r7, #16]
+ 8001232:	3314      	adds	r3, #20
+ 8001234:	b2db      	uxtb	r3, r3
+ 8001236:	005b      	lsls	r3, r3, #1
+ 8001238:	73bb      	strb	r3, [r7, #14]
 		uint8_t high_addr = low_addr + 1;
- 8001232:	7bbb      	ldrb	r3, [r7, #14]
- 8001234:	3301      	adds	r3, #1
- 8001236:	737b      	strb	r3, [r7, #13]
+ 800123a:	7bbb      	ldrb	r3, [r7, #14]
+ 800123c:	3301      	adds	r3, #1
+ 800123e:	737b      	strb	r3, [r7, #13]
 
 		// Lire l'octet bas
 		status = HAL_I2C_Mem_Read(&hi2c1, SENSOR_ADDRESS, low_addr, I2C_MEMADD_SIZE_8BIT, &low_byte, 1, HAL_MAX_DELAY);
- 8001238:	7bbb      	ldrb	r3, [r7, #14]
- 800123a:	b29a      	uxth	r2, r3
- 800123c:	f04f 33ff 	mov.w	r3, #4294967295	@ 0xffffffff
- 8001240:	9302      	str	r3, [sp, #8]
- 8001242:	2301      	movs	r3, #1
- 8001244:	9301      	str	r3, [sp, #4]
- 8001246:	f107 0309 	add.w	r3, r7, #9
- 800124a:	9300      	str	r3, [sp, #0]
- 800124c:	2301      	movs	r3, #1
- 800124e:	21d6      	movs	r1, #214	@ 0xd6
- 8001250:	4825      	ldr	r0, [pc, #148]	@ (80012e8 <Read_sensor_data+0x1a0>)
- 8001252:	f001 f9f9 	bl	8002648 <HAL_I2C_Mem_Read>
- 8001256:	4603      	mov	r3, r0
- 8001258:	73fb      	strb	r3, [r7, #15]
+ 8001240:	7bbb      	ldrb	r3, [r7, #14]
+ 8001242:	b29a      	uxth	r2, r3
+ 8001244:	f04f 33ff 	mov.w	r3, #4294967295	@ 0xffffffff
+ 8001248:	9302      	str	r3, [sp, #8]
+ 800124a:	2301      	movs	r3, #1
+ 800124c:	9301      	str	r3, [sp, #4]
+ 800124e:	f107 0309 	add.w	r3, r7, #9
+ 8001252:	9300      	str	r3, [sp, #0]
+ 8001254:	2301      	movs	r3, #1
+ 8001256:	21d6      	movs	r1, #214	@ 0xd6
+ 8001258:	4823      	ldr	r0, [pc, #140]	@ (80012e8 <Read_sensor_data+0x1a0>)
+ 800125a:	f001 f9f5 	bl	8002648 <HAL_I2C_Mem_Read>
+ 800125e:	4603      	mov	r3, r0
+ 8001260:	73fb      	strb	r3, [r7, #15]
 		if (status != HAL_OK) return status;
- 800125a:	7bfb      	ldrb	r3, [r7, #15]
- 800125c:	2b00      	cmp	r3, #0
- 800125e:	d001      	beq.n	8001264 <Read_sensor_data+0x11c>
- 8001260:	7bfb      	ldrb	r3, [r7, #15]
- 8001262:	e038      	b.n	80012d6 <Read_sensor_data+0x18e>
+ 8001262:	7bfb      	ldrb	r3, [r7, #15]
+ 8001264:	2b00      	cmp	r3, #0
+ 8001266:	d001      	beq.n	800126c <Read_sensor_data+0x124>
+ 8001268:	7bfb      	ldrb	r3, [r7, #15]
+ 800126a:	e035      	b.n	80012d8 <Read_sensor_data+0x190>
 
 		// Lire l'octet haut
 		status = HAL_I2C_Mem_Read(&hi2c1, SENSOR_ADDRESS, high_addr, I2C_MEMADD_SIZE_8BIT, &high_byte, 1, HAL_MAX_DELAY);
- 8001264:	7b7b      	ldrb	r3, [r7, #13]
- 8001266:	b29a      	uxth	r2, r3
- 8001268:	f04f 33ff 	mov.w	r3, #4294967295	@ 0xffffffff
- 800126c:	9302      	str	r3, [sp, #8]
- 800126e:	2301      	movs	r3, #1
- 8001270:	9301      	str	r3, [sp, #4]
- 8001272:	f107 0308 	add.w	r3, r7, #8
- 8001276:	9300      	str	r3, [sp, #0]
- 8001278:	2301      	movs	r3, #1
- 800127a:	21d6      	movs	r1, #214	@ 0xd6
- 800127c:	481a      	ldr	r0, [pc, #104]	@ (80012e8 <Read_sensor_data+0x1a0>)
- 800127e:	f001 f9e3 	bl	8002648 <HAL_I2C_Mem_Read>
- 8001282:	4603      	mov	r3, r0
- 8001284:	73fb      	strb	r3, [r7, #15]
+ 800126c:	7b7b      	ldrb	r3, [r7, #13]
+ 800126e:	b29a      	uxth	r2, r3
+ 8001270:	f04f 33ff 	mov.w	r3, #4294967295	@ 0xffffffff
+ 8001274:	9302      	str	r3, [sp, #8]
+ 8001276:	2301      	movs	r3, #1
+ 8001278:	9301      	str	r3, [sp, #4]
+ 800127a:	f107 0308 	add.w	r3, r7, #8
+ 800127e:	9300      	str	r3, [sp, #0]
+ 8001280:	2301      	movs	r3, #1
+ 8001282:	21d6      	movs	r1, #214	@ 0xd6
+ 8001284:	4818      	ldr	r0, [pc, #96]	@ (80012e8 <Read_sensor_data+0x1a0>)
+ 8001286:	f001 f9df 	bl	8002648 <HAL_I2C_Mem_Read>
+ 800128a:	4603      	mov	r3, r0
+ 800128c:	73fb      	strb	r3, [r7, #15]
 		if (status != HAL_OK) return status;
- 8001286:	7bfb      	ldrb	r3, [r7, #15]
- 8001288:	2b00      	cmp	r3, #0
- 800128a:	d001      	beq.n	8001290 <Read_sensor_data+0x148>
- 800128c:	7bfb      	ldrb	r3, [r7, #15]
- 800128e:	e022      	b.n	80012d6 <Read_sensor_data+0x18e>
+ 800128e:	7bfb      	ldrb	r3, [r7, #15]
+ 8001290:	2b00      	cmp	r3, #0
+ 8001292:	d001      	beq.n	8001298 <Read_sensor_data+0x150>
+ 8001294:	7bfb      	ldrb	r3, [r7, #15]
+ 8001296:	e01f      	b.n	80012d8 <Read_sensor_data+0x190>
 
 		// Combiner les octets pour obtenir la valeur 16 bits
-		accel_data[i] = (int16_t)((high_byte << 8) | low_byte) * ACC_SENSITIVITY_16G;
- 8001290:	7a3b      	ldrb	r3, [r7, #8]
- 8001292:	021b      	lsls	r3, r3, #8
- 8001294:	b21a      	sxth	r2, r3
- 8001296:	7a7b      	ldrb	r3, [r7, #9]
- 8001298:	b21b      	sxth	r3, r3
- 800129a:	4313      	orrs	r3, r2
- 800129c:	b21b      	sxth	r3, r3
- 800129e:	4618      	mov	r0, r3
- 80012a0:	f7ff f940 	bl	8000524 <__aeabi_i2d>
- 80012a4:	a30e      	add	r3, pc, #56	@ (adr r3, 80012e0 <Read_sensor_data+0x198>)
- 80012a6:	e9d3 2300 	ldrd	r2, r3, [r3]
- 80012aa:	f7ff f9a5 	bl	80005f8 <__aeabi_dmul>
- 80012ae:	4602      	mov	r2, r0
- 80012b0:	460b      	mov	r3, r1
- 80012b2:	4610      	mov	r0, r2
- 80012b4:	4619      	mov	r1, r3
- 80012b6:	693b      	ldr	r3, [r7, #16]
- 80012b8:	005b      	lsls	r3, r3, #1
- 80012ba:	687a      	ldr	r2, [r7, #4]
- 80012bc:	18d4      	adds	r4, r2, r3
- 80012be:	f7ff fc4b 	bl	8000b58 <__aeabi_d2iz>
- 80012c2:	4603      	mov	r3, r0
- 80012c4:	b21b      	sxth	r3, r3
- 80012c6:	8023      	strh	r3, [r4, #0]
+		accel_data[i] = (int16_t)(((high_byte << 8) | low_byte) * ACC_SENSITIVITY_16G);
+ 8001298:	7a3b      	ldrb	r3, [r7, #8]
+ 800129a:	021b      	lsls	r3, r3, #8
+ 800129c:	7a7a      	ldrb	r2, [r7, #9]
+ 800129e:	4313      	orrs	r3, r2
+ 80012a0:	4618      	mov	r0, r3
+ 80012a2:	f7ff f93f 	bl	8000524 <__aeabi_i2d>
+ 80012a6:	a30e      	add	r3, pc, #56	@ (adr r3, 80012e0 <Read_sensor_data+0x198>)
+ 80012a8:	e9d3 2300 	ldrd	r2, r3, [r3]
+ 80012ac:	f7ff f9a4 	bl	80005f8 <__aeabi_dmul>
+ 80012b0:	4602      	mov	r2, r0
+ 80012b2:	460b      	mov	r3, r1
+ 80012b4:	4610      	mov	r0, r2
+ 80012b6:	4619      	mov	r1, r3
+ 80012b8:	693b      	ldr	r3, [r7, #16]
+ 80012ba:	005b      	lsls	r3, r3, #1
+ 80012bc:	687a      	ldr	r2, [r7, #4]
+ 80012be:	18d4      	adds	r4, r2, r3
+ 80012c0:	f7ff fc4a 	bl	8000b58 <__aeabi_d2iz>
+ 80012c4:	4603      	mov	r3, r0
+ 80012c6:	b21b      	sxth	r3, r3
+ 80012c8:	8023      	strh	r3, [r4, #0]
 	for (int i = 0; i < 3; i++) {
- 80012c8:	693b      	ldr	r3, [r7, #16]
- 80012ca:	3301      	adds	r3, #1
- 80012cc:	613b      	str	r3, [r7, #16]
- 80012ce:	693b      	ldr	r3, [r7, #16]
- 80012d0:	2b02      	cmp	r3, #2
- 80012d2:	dda9      	ble.n	8001228 <Read_sensor_data+0xe0>
+ 80012ca:	693b      	ldr	r3, [r7, #16]
+ 80012cc:	3301      	adds	r3, #1
+ 80012ce:	613b      	str	r3, [r7, #16]
+ 80012d0:	693b      	ldr	r3, [r7, #16]
+ 80012d2:	2b02      	cmp	r3, #2
+ 80012d4:	ddac      	ble.n	8001230 <Read_sensor_data+0xe8>
 	}
 
 	return HAL_OK;
- 80012d4:	2300      	movs	r3, #0
+ 80012d6:	2300      	movs	r3, #0
 }
- 80012d6:	4618      	mov	r0, r3
- 80012d8:	371c      	adds	r7, #28
- 80012da:	46bd      	mov	sp, r7
- 80012dc:	bd90      	pop	{r4, r7, pc}
- 80012de:	bf00      	nop
+ 80012d8:	4618      	mov	r0, r3
+ 80012da:	371c      	adds	r7, #28
+ 80012dc:	46bd      	mov	sp, r7
+ 80012de:	bd90      	pop	{r4, r7, pc}
  80012e0:	5a1cac08 	.word	0x5a1cac08
  80012e4:	3fdf3b64 	.word	0x3fdf3b64
  80012e8:	200001f0 	.word	0x200001f0
@@ -1795,7 +1796,7 @@ void Display_6_axis_data(void) {
  8001306:	2b00      	cmp	r3, #0
  8001308:	d116      	bne.n	8001338 <Display_6_axis_data+0x4c>
         // Afficher les valeurs dans le format demandé
-        printf("XL/(X,Y,Z) : %d ; %d ; %d\r\n", accel_data[0], accel_data[1], accel_data[2]);
+        printf("XL/(X,Y,Z) [mg] : %d ; %d ; %d\r\n", accel_data[0], accel_data[1], accel_data[2]);
  800130a:	f9b7 3008 	ldrsh.w	r3, [r7, #8]
  800130e:	4619      	mov	r1, r3
  8001310:	f9b7 300a 	ldrsh.w	r3, [r7, #10]
@@ -1803,7 +1804,7 @@ void Display_6_axis_data(void) {
  8001316:	f9b7 300c 	ldrsh.w	r3, [r7, #12]
  800131a:	480c      	ldr	r0, [pc, #48]	@ (800134c <Display_6_axis_data+0x60>)
  800131c:	f006 fff4 	bl	8008308 <iprintf>
-        printf("G/(X,Y,Z) : %d ; %d ; %d\r\n", gyro_data[0], gyro_data[1], gyro_data[2]);
+        printf("G/(X,Y,Z) [mdps] : %d ; %d ; %d\r\n", gyro_data[0], gyro_data[1], gyro_data[2]);
  8001320:	f9b7 3000 	ldrsh.w	r3, [r7]
  8001324:	4619      	mov	r1, r3
  8001326:	f9b7 3002 	ldrsh.w	r3, [r7, #2]
@@ -1829,8 +1830,8 @@ void Display_6_axis_data(void) {
  8001348:	bd80      	pop	{r7, pc}
  800134a:	bf00      	nop
  800134c:	0800afd4 	.word	0x0800afd4
- 8001350:	0800aff0 	.word	0x0800aff0
- 8001354:	0800b00c 	.word	0x0800b00c
+ 8001350:	0800aff8 	.word	0x0800aff8
+ 8001354:	0800b01c 	.word	0x0800b01c
 
 08001358 <MX_GPIO_Init>:
         * Output
@@ -3511,7 +3512,7 @@ LoopForever:
   ldr r1, =_edata
  8001b98:	200001d4 	.word	0x200001d4
   ldr r2, =_sidata
- 8001b9c:	0800b4b4 	.word	0x0800b4b4
+ 8001b9c:	0800b4c4 	.word	0x0800b4c4
   ldr r2, =_sbss
  8001ba0:	200001d4 	.word	0x200001d4
   ldr r4, =_ebss
@@ -9780,7 +9781,7 @@ HAL_StatusTypeDef HAL_RCC_OscConfig(RCC_OscInitTypeDef  *RCC_OscInitStruct)
  8003e14:	e014      	b.n	8003e40 <HAL_RCC_OscConfig+0x298>
  8003e16:	bf00      	nop
  8003e18:	40021000 	.word	0x40021000
- 8003e1c:	0800b030 	.word	0x0800b030
+ 8003e1c:	0800b040 	.word	0x0800b040
  8003e20:	20000000 	.word	0x20000000
  8003e24:	20000004 	.word	0x20000004
  8003e28:	4ba0      	ldr	r3, [pc, #640]	@ (80040ac <HAL_RCC_OscConfig+0x504>)
@@ -11085,7 +11086,7 @@ HAL_StatusTypeDef HAL_RCC_ClockConfig(RCC_ClkInitTypeDef  *RCC_ClkInitStruct, ui
  800454a:	bd80      	pop	{r7, pc}
  800454c:	40022000 	.word	0x40022000
  8004550:	40021000 	.word	0x40021000
- 8004554:	0800b030 	.word	0x0800b030
+ 8004554:	0800b040 	.word	0x0800b040
  8004558:	20000000 	.word	0x20000000
  800455c:	20000004 	.word	0x20000004
 
@@ -11290,7 +11291,7 @@ uint32_t HAL_RCC_GetSysClockFreq(void)
  8004664:	4770      	bx	lr
  8004666:	bf00      	nop
  8004668:	40021000 	.word	0x40021000
- 800466c:	0800b048 	.word	0x0800b048
+ 800466c:	0800b058 	.word	0x0800b058
  8004670:	00f42400 	.word	0x00f42400
  8004674:	007a1200 	.word	0x007a1200
 
@@ -11339,7 +11340,7 @@ uint32_t HAL_RCC_GetPCLK1Freq(void)
  80046b0:	4618      	mov	r0, r3
  80046b2:	bd80      	pop	{r7, pc}
  80046b4:	40021000 	.word	0x40021000
- 80046b8:	0800b040 	.word	0x0800b040
+ 80046b8:	0800b050 	.word	0x0800b050
 
 080046bc <HAL_RCC_GetPCLK2Freq>:
   * @note   Each time PCLK2 changes, this function must be called to update the
@@ -11366,7 +11367,7 @@ uint32_t HAL_RCC_GetPCLK2Freq(void)
  80046dc:	4618      	mov	r0, r3
  80046de:	bd80      	pop	{r7, pc}
  80046e0:	40021000 	.word	0x40021000
- 80046e4:	0800b040 	.word	0x0800b040
+ 80046e4:	0800b050 	.word	0x0800b050
 
 080046e8 <RCC_SetFlashLatencyFromMSIRange>:
             voltage range.
@@ -17547,11 +17548,11 @@ static void UART_EndRxTransfer(UART_HandleTypeDef *huart)
  8006b68:	e7ee      	b.n	8006b48 <_printf_float+0x2a4>
  8006b6a:	bf00      	nop
  8006b6c:	7fefffff 	.word	0x7fefffff
- 8006b70:	0800b078 	.word	0x0800b078
- 8006b74:	0800b07c 	.word	0x0800b07c
- 8006b78:	0800b080 	.word	0x0800b080
- 8006b7c:	0800b084 	.word	0x0800b084
- 8006b80:	0800b088 	.word	0x0800b088
+ 8006b70:	0800b088 	.word	0x0800b088
+ 8006b74:	0800b08c 	.word	0x0800b08c
+ 8006b78:	0800b090 	.word	0x0800b090
+ 8006b7c:	0800b094 	.word	0x0800b094
+ 8006b80:	0800b098 	.word	0x0800b098
  8006b84:	6da3      	ldr	r3, [r4, #88]	@ 0x58
  8006b86:	f8dd a028 	ldr.w	sl, [sp, #40]	@ 0x28
  8006b8a:	4553      	cmp	r3, sl
@@ -18031,8 +18032,8 @@ static void UART_EndRxTransfer(UART_HandleTypeDef *huart)
  8007004:	f104 0619 	add.w	r6, r4, #25
  8007008:	e7f5      	b.n	8006ff6 <_printf_i+0x222>
  800700a:	bf00      	nop
- 800700c:	0800b08a 	.word	0x0800b08a
- 8007010:	0800b09b 	.word	0x0800b09b
+ 800700c:	0800b09a 	.word	0x0800b09a
+ 8007010:	0800b0ab 	.word	0x0800b0ab
 
 08007014 <_scanf_float>:
  8007014:	e92d 4ff0 	stmdb	sp!, {r4, r5, r6, r7, r8, r9, sl, fp, lr}
@@ -18428,8 +18429,8 @@ static void UART_EndRxTransfer(UART_HandleTypeDef *huart)
  800742c:	f04f 0900 	mov.w	r9, #0
  8007430:	e629      	b.n	8007086 <_scanf_float+0x72>
  8007432:	bf00      	nop
- 8007434:	0800b0ac 	.word	0x0800b0ac
- 8007438:	0800b4a3 	.word	0x0800b4a3
+ 8007434:	0800b0bc 	.word	0x0800b0bc
+ 8007438:	0800b4b3 	.word	0x0800b4b3
 
 0800743c <siprintf>:
  800743c:	b40e      	push	{r1, r2, r3}
@@ -18899,8 +18900,8 @@ static void UART_EndRxTransfer(UART_HandleTypeDef *huart)
  8007884:	e785      	b.n	8007792 <_strtod_l+0x192>
  8007886:	f04f 0c01 	mov.w	ip, #1
  800788a:	e7f8      	b.n	800787e <_strtod_l+0x27e>
- 800788c:	0800b0c8 	.word	0x0800b0c8
- 8007890:	0800b0b1 	.word	0x0800b0b1
+ 800788c:	0800b0d8 	.word	0x0800b0d8
+ 8007890:	0800b0c1 	.word	0x0800b0c1
  8007894:	7ff00000 	.word	0x7ff00000
  8007898:	9a19      	ldr	r2, [sp, #100]	@ 0x64
  800789a:	1c51      	adds	r1, r2, #1
@@ -19193,13 +19194,13 @@ static void UART_EndRxTransfer(UART_HandleTypeDef *huart)
  8007b76:	6013      	str	r3, [r2, #0]
  8007b78:	e768      	b.n	8007a4c <_strtod_l+0x44c>
  8007b7a:	bf00      	nop
- 8007b7c:	0800b085 	.word	0x0800b085
- 8007b80:	0800b0b4 	.word	0x0800b0b4
- 8007b84:	0800b07d 	.word	0x0800b07d
- 8007b88:	0800b214 	.word	0x0800b214
- 8007b8c:	0800b4a3 	.word	0x0800b4a3
- 8007b90:	0800b3a0 	.word	0x0800b3a0
- 8007b94:	0800b378 	.word	0x0800b378
+ 8007b7c:	0800b095 	.word	0x0800b095
+ 8007b80:	0800b0c4 	.word	0x0800b0c4
+ 8007b84:	0800b08d 	.word	0x0800b08d
+ 8007b88:	0800b224 	.word	0x0800b224
+ 8007b8c:	0800b4b3 	.word	0x0800b4b3
+ 8007b90:	0800b3b0 	.word	0x0800b3b0
+ 8007b94:	0800b388 	.word	0x0800b388
  8007b98:	7ff00000 	.word	0x7ff00000
  8007b9c:	7ca00000 	.word	0x7ca00000
  8007ba0:	7fefffff 	.word	0x7fefffff
@@ -19485,7 +19486,7 @@ static void UART_EndRxTransfer(UART_HandleTypeDef *huart)
  8007e4e:	6013      	str	r3, [r2, #0]
  8007e50:	e600      	b.n	8007a54 <_strtod_l+0x454>
  8007e52:	bf00      	nop
- 8007e54:	0800b0e0 	.word	0x0800b0e0
+ 8007e54:	0800b0f0 	.word	0x0800b0f0
  8007e58:	fffffc02 	.word	0xfffffc02
  8007e5c:	39500000 	.word	0x39500000
  8007e60:	7ff00000 	.word	0x7ff00000
@@ -19911,7 +19912,7 @@ static void UART_EndRxTransfer(UART_HandleTypeDef *huart)
  80082bc:	d1f6      	bne.n	80082ac <_strtol_l.constprop.0+0xd8>
  80082be:	f8c8 1000 	str.w	r1, [r8]
  80082c2:	e794      	b.n	80081ee <_strtol_l.constprop.0+0x1a>
- 80082c4:	0800b111 	.word	0x0800b111
+ 80082c4:	0800b121 	.word	0x0800b121
 
 080082c8 <_strtol_r>:
  80082c8:	f7ff bf84 	b.w	80081d4 <_strtol_l.constprop.0>
@@ -20112,10 +20113,10 @@ static void UART_EndRxTransfer(UART_HandleTypeDef *huart)
  8008462:	4798      	blx	r3
  8008464:	3601      	adds	r6, #1
  8008466:	e7f2      	b.n	800844e <__libc_init_array+0x1e>
- 8008468:	0800b4ac 	.word	0x0800b4ac
- 800846c:	0800b4ac 	.word	0x0800b4ac
- 8008470:	0800b4ac 	.word	0x0800b4ac
- 8008474:	0800b4b0 	.word	0x0800b4b0
+ 8008468:	0800b4bc 	.word	0x0800b4bc
+ 800846c:	0800b4bc 	.word	0x0800b4bc
+ 8008470:	0800b4bc 	.word	0x0800b4bc
+ 8008474:	0800b4c0 	.word	0x0800b4c0
 
 08008478 <__retarget_lock_init_recursive>:
  8008478:	4770      	bx	lr
@@ -20541,15 +20542,15 @@ static void UART_EndRxTransfer(UART_HandleTypeDef *huart)
  800888c:	3fc68a28 	.word	0x3fc68a28
  8008890:	509f79fb 	.word	0x509f79fb
  8008894:	3fd34413 	.word	0x3fd34413
- 8008898:	0800b21e 	.word	0x0800b21e
- 800889c:	0800b235 	.word	0x0800b235
+ 8008898:	0800b22e 	.word	0x0800b22e
+ 800889c:	0800b245 	.word	0x0800b245
  80088a0:	7ff00000 	.word	0x7ff00000
- 80088a4:	0800b089 	.word	0x0800b089
+ 80088a4:	0800b099 	.word	0x0800b099
  80088a8:	3ff80000 	.word	0x3ff80000
- 80088ac:	0800b3a0 	.word	0x0800b3a0
- 80088b0:	0800b28d 	.word	0x0800b28d
- 80088b4:	0800b21a 	.word	0x0800b21a
- 80088b8:	0800b088 	.word	0x0800b088
+ 80088ac:	0800b3b0 	.word	0x0800b3b0
+ 80088b0:	0800b29d 	.word	0x0800b29d
+ 80088b4:	0800b22a 	.word	0x0800b22a
+ 80088b8:	0800b098 	.word	0x0800b098
  80088bc:	f8db 301c 	ldr.w	r3, [fp, #28]
  80088c0:	6018      	str	r0, [r3, #0]
  80088c2:	9b07      	ldr	r3, [sp, #28]
@@ -20801,8 +20802,8 @@ static void UART_EndRxTransfer(UART_HandleTypeDef *huart)
  8008b82:	f7f7 fd39 	bl	80005f8 <__aeabi_dmul>
  8008b86:	e9cd 0102 	strd	r0, r1, [sp, #8]
  8008b8a:	e7c4      	b.n	8008b16 <_dtoa_r+0x546>
- 8008b8c:	0800b3a0 	.word	0x0800b3a0
- 8008b90:	0800b378 	.word	0x0800b378
+ 8008b8c:	0800b3b0 	.word	0x0800b3b0
+ 8008b90:	0800b388 	.word	0x0800b388
  8008b94:	3ff00000 	.word	0x3ff00000
  8008b98:	40240000 	.word	0x40240000
  8008b9c:	401c0000 	.word	0x401c0000
@@ -21404,8 +21405,8 @@ static void UART_EndRxTransfer(UART_HandleTypeDef *huart)
  8009148:	f000 ffae 	bl	800a0a8 <__multadd>
  800914c:	4681      	mov	r9, r0
  800914e:	e7ea      	b.n	8009126 <_dtoa_r+0xb56>
- 8009150:	0800b28d 	.word	0x0800b28d
- 8009154:	0800b211 	.word	0x0800b211
+ 8009150:	0800b29d 	.word	0x0800b29d
+ 8009154:	0800b221 	.word	0x0800b221
 
 08009158 <rshift>:
  8009158:	6903      	ldr	r3, [r0, #16]
@@ -21774,9 +21775,9 @@ static void UART_EndRxTransfer(UART_HandleTypeDef *huart)
  80094d2:	2b00      	cmp	r3, #0
  80094d4:	d1dd      	bne.n	8009492 <__gethex+0x26a>
  80094d6:	e7ee      	b.n	80094b6 <__gethex+0x28e>
- 80094d8:	0800b0b1 	.word	0x0800b0b1
- 80094dc:	0800b28d 	.word	0x0800b28d
- 80094e0:	0800b29e 	.word	0x0800b29e
+ 80094d8:	0800b0c1 	.word	0x0800b0c1
+ 80094dc:	0800b29d 	.word	0x0800b29d
+ 80094e0:	0800b2ae 	.word	0x0800b2ae
  80094e4:	1e6f      	subs	r7, r5, #1
  80094e6:	f1b9 0f00 	cmp.w	r9, #0
  80094ea:	d130      	bne.n	800954e <__gethex+0x326>
@@ -21911,7 +21912,7 @@ static void UART_EndRxTransfer(UART_HandleTypeDef *huart)
  800963e:	42b0      	cmp	r0, r6
  8009640:	dbe7      	blt.n	8009612 <__gethex+0x3ea>
  8009642:	e7f0      	b.n	8009626 <__gethex+0x3fe>
- 8009644:	0800b28d 	.word	0x0800b28d
+ 8009644:	0800b29d 	.word	0x0800b29d
 
 08009648 <L_shift>:
  8009648:	f1c2 0208 	rsb	r2, r2, #8
@@ -22353,11 +22354,11 @@ static void UART_EndRxTransfer(UART_HandleTypeDef *huart)
  8009a5c:	4638      	mov	r0, r7
  8009a5e:	f7fd f9b9 	bl	8006dd4 <_printf_i>
  8009a62:	e7ed      	b.n	8009a40 <_svfiprintf_r+0x1c0>
- 8009a64:	0800b2fe 	.word	0x0800b2fe
- 8009a68:	0800b308 	.word	0x0800b308
+ 8009a64:	0800b30e 	.word	0x0800b30e
+ 8009a68:	0800b318 	.word	0x0800b318
  8009a6c:	080068a5 	.word	0x080068a5
  8009a70:	080097cb 	.word	0x080097cb
- 8009a74:	0800b304 	.word	0x0800b304
+ 8009a74:	0800b314 	.word	0x0800b314
 
 08009a78 <__sfputc_r>:
  8009a78:	6893      	ldr	r3, [r2, #8]
@@ -22623,11 +22624,11 @@ static void UART_EndRxTransfer(UART_HandleTypeDef *huart)
  8009ce0:	4630      	mov	r0, r6
  8009ce2:	f7fd f877 	bl	8006dd4 <_printf_i>
  8009ce6:	e7e4      	b.n	8009cb2 <_vfiprintf_r+0x1e6>
- 8009ce8:	0800b2fe 	.word	0x0800b2fe
- 8009cec:	0800b308 	.word	0x0800b308
+ 8009ce8:	0800b30e 	.word	0x0800b30e
+ 8009cec:	0800b318 	.word	0x0800b318
  8009cf0:	080068a5 	.word	0x080068a5
  8009cf4:	08009aa7 	.word	0x08009aa7
- 8009cf8:	0800b304 	.word	0x0800b304
+ 8009cf8:	0800b314 	.word	0x0800b314
 
 08009cfc <malloc>:
  8009cfc:	4b02      	ldr	r3, [pc, #8]	@ (8009d08 <malloc+0xc>)
@@ -23016,8 +23017,8 @@ static void UART_EndRxTransfer(UART_HandleTypeDef *huart)
  800a054:	e9c0 3303 	strd	r3, r3, [r0, #12]
  800a058:	e7f7      	b.n	800a04a <_Balloc+0x66>
  800a05a:	bf00      	nop
- 800a05c:	0800b21e 	.word	0x0800b21e
- 800a060:	0800b30f 	.word	0x0800b30f
+ 800a05c:	0800b22e 	.word	0x0800b22e
+ 800a060:	0800b31f 	.word	0x0800b31f
 
 0800a064 <_Bfree>:
  800a064:	b570      	push	{r4, r5, r6, lr}
@@ -23045,8 +23046,8 @@ static void UART_EndRxTransfer(UART_HandleTypeDef *huart)
  800a098:	6021      	str	r1, [r4, #0]
  800a09a:	f843 4022 	str.w	r4, [r3, r2, lsl #2]
  800a09e:	bd70      	pop	{r4, r5, r6, pc}
- 800a0a0:	0800b21e 	.word	0x0800b21e
- 800a0a4:	0800b30f 	.word	0x0800b30f
+ 800a0a0:	0800b22e 	.word	0x0800b22e
+ 800a0a4:	0800b31f 	.word	0x0800b31f
 
 0800a0a8 <__multadd>:
  800a0a8:	e92d 41f0 	stmdb	sp!, {r4, r5, r6, r7, r8, lr}
@@ -23100,8 +23101,8 @@ static void UART_EndRxTransfer(UART_HandleTypeDef *huart)
  800a124:	6125      	str	r5, [r4, #16]
  800a126:	4620      	mov	r0, r4
  800a128:	e8bd 81f0 	ldmia.w	sp!, {r4, r5, r6, r7, r8, pc}
- 800a12c:	0800b28d 	.word	0x0800b28d
- 800a130:	0800b30f 	.word	0x0800b30f
+ 800a12c:	0800b29d 	.word	0x0800b29d
+ 800a130:	0800b31f 	.word	0x0800b31f
 
 0800a134 <__s2b>:
  800a134:	e92d 43f8 	stmdb	sp!, {r3, r4, r5, r6, r7, r8, r9, lr}
@@ -23162,8 +23163,8 @@ static void UART_EndRxTransfer(UART_HandleTypeDef *huart)
  800a1b8:	f7ff ff76 	bl	800a0a8 <__multadd>
  800a1bc:	e7ee      	b.n	800a19c <__s2b+0x68>
  800a1be:	bf00      	nop
- 800a1c0:	0800b28d 	.word	0x0800b28d
- 800a1c4:	0800b30f 	.word	0x0800b30f
+ 800a1c0:	0800b29d 	.word	0x0800b29d
+ 800a1c4:	0800b31f 	.word	0x0800b31f
 
 0800a1c8 <__hi0bits>:
  800a1c8:	f5b0 3f80 	cmp.w	r0, #65536	@ 0x10000
@@ -23253,8 +23254,8 @@ static void UART_EndRxTransfer(UART_HandleTypeDef *huart)
  800a27e:	6103      	str	r3, [r0, #16]
  800a280:	bd10      	pop	{r4, pc}
  800a282:	bf00      	nop
- 800a284:	0800b28d 	.word	0x0800b28d
- 800a288:	0800b30f 	.word	0x0800b30f
+ 800a284:	0800b29d 	.word	0x0800b29d
+ 800a288:	0800b31f 	.word	0x0800b31f
 
 0800a28c <__multiply>:
  800a28c:	e92d 4ff0 	stmdb	sp!, {r4, r5, r6, r7, r8, r9, sl, fp, lr}
@@ -23373,8 +23374,8 @@ static void UART_EndRxTransfer(UART_HandleTypeDef *huart)
  800a3d2:	e799      	b.n	800a308 <__multiply+0x7c>
  800a3d4:	3e01      	subs	r6, #1
  800a3d6:	e79b      	b.n	800a310 <__multiply+0x84>
- 800a3d8:	0800b28d 	.word	0x0800b28d
- 800a3dc:	0800b30f 	.word	0x0800b30f
+ 800a3d8:	0800b29d 	.word	0x0800b29d
+ 800a3dc:	0800b31f 	.word	0x0800b31f
 
 0800a3e0 <__pow5mult>:
  800a3e0:	e92d 43f8 	stmdb	sp!, {r3, r4, r5, r6, r7, r8, r9, lr}
@@ -23442,9 +23443,9 @@ static void UART_EndRxTransfer(UART_HandleTypeDef *huart)
  800a480:	4630      	mov	r0, r6
  800a482:	e8bd 83f8 	ldmia.w	sp!, {r3, r4, r5, r6, r7, r8, r9, pc}
  800a486:	bf00      	nop
- 800a488:	0800b368 	.word	0x0800b368
- 800a48c:	0800b21e 	.word	0x0800b21e
- 800a490:	0800b30f 	.word	0x0800b30f
+ 800a488:	0800b378 	.word	0x0800b378
+ 800a48c:	0800b22e 	.word	0x0800b22e
+ 800a490:	0800b31f 	.word	0x0800b31f
 
 0800a494 <__lshift>:
  800a494:	e92d 47f0 	stmdb	sp!, {r4, r5, r6, r7, r8, r9, sl, lr}
@@ -23523,8 +23524,8 @@ static void UART_EndRxTransfer(UART_HandleTypeDef *huart)
  800a55e:	d8f9      	bhi.n	800a554 <__lshift+0xc0>
  800a560:	e7ea      	b.n	800a538 <__lshift+0xa4>
  800a562:	bf00      	nop
- 800a564:	0800b28d 	.word	0x0800b28d
- 800a568:	0800b30f 	.word	0x0800b30f
+ 800a564:	0800b29d 	.word	0x0800b29d
+ 800a568:	0800b31f 	.word	0x0800b31f
 
 0800a56c <__mcmp>:
  800a56c:	690a      	ldr	r2, [r1, #16]
@@ -23660,8 +23661,8 @@ static void UART_EndRxTransfer(UART_HandleTypeDef *huart)
  800a6be:	3f01      	subs	r7, #1
  800a6c0:	e7e7      	b.n	800a692 <__mdiff+0xee>
  800a6c2:	bf00      	nop
- 800a6c4:	0800b28d 	.word	0x0800b28d
- 800a6c8:	0800b30f 	.word	0x0800b30f
+ 800a6c4:	0800b29d 	.word	0x0800b29d
+ 800a6c8:	0800b31f 	.word	0x0800b31f
 
 0800a6cc <__ulp>:
  800a6cc:	b082      	sub	sp, #8
@@ -23811,8 +23812,8 @@ static void UART_EndRxTransfer(UART_HandleTypeDef *huart)
  800a84a:	f7ff fcbd 	bl	800a1c8 <__hi0bits>
  800a84e:	ebc0 1042 	rsb	r0, r0, r2, lsl #5
  800a852:	e7e5      	b.n	800a820 <__d2b+0x74>
- 800a854:	0800b28d 	.word	0x0800b28d
- 800a858:	0800b30f 	.word	0x0800b30f
+ 800a854:	0800b29d 	.word	0x0800b29d
+ 800a858:	0800b31f 	.word	0x0800b31f
 
 0800a85c <__ratio>:
  800a85c:	e92d 4ff0 	stmdb	sp!, {r4, r5, r6, r7, r8, r9, sl, fp, lr}
@@ -24401,9 +24402,9 @@ static void UART_EndRxTransfer(UART_HandleTypeDef *huart)
  800ad80:	e7f4      	b.n	800ad6c <__assert_func+0x14>
  800ad82:	bf00      	nop
  800ad84:	20000184 	.word	0x20000184
- 800ad88:	0800b4a3 	.word	0x0800b4a3
- 800ad8c:	0800b475 	.word	0x0800b475
- 800ad90:	0800b468 	.word	0x0800b468
+ 800ad88:	0800b4b3 	.word	0x0800b4b3
+ 800ad8c:	0800b485 	.word	0x0800b485
+ 800ad90:	0800b478 	.word	0x0800b478
 
 0800ad94 <_calloc_r>:
  800ad94:	b570      	push	{r4, r5, r6, lr}

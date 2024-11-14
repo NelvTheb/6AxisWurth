@@ -96,7 +96,7 @@ HAL_StatusTypeDef Read_sensor_data(int16_t* accel_data, int16_t* gyro_data) {
 		if (status != HAL_OK) return status;
 
 		// Combiner les octets pour obtenir la valeur 16 bits
-		gyro_data[i] = (int16_t)((high_byte << 8) | low_byte) * GYRO_SENSITIVITY_2000DPS;
+		gyro_data[i] = (int16_t)(((high_byte << 8) | low_byte) * GYRO_SENSITIVITY_2000DPS);
 	}
 	// Lire les données de l'accéléromètre
 	for (int i = 0; i < 3; i++) {
@@ -113,7 +113,7 @@ HAL_StatusTypeDef Read_sensor_data(int16_t* accel_data, int16_t* gyro_data) {
 		if (status != HAL_OK) return status;
 
 		// Combiner les octets pour obtenir la valeur 16 bits
-		accel_data[i] = (int16_t)((high_byte << 8) | low_byte) * ACC_SENSITIVITY_16G;
+		accel_data[i] = (int16_t)(((high_byte << 8) | low_byte) * ACC_SENSITIVITY_16G);
 	}
 
 	return HAL_OK;
@@ -128,8 +128,8 @@ void Display_6_axis_data(void) {
 
     if (status == HAL_OK) {
         // Afficher les valeurs dans le format demandé
-        printf("XL/(X,Y,Z) : %d ; %d ; %d\r\n", accel_data[0], accel_data[1], accel_data[2]);
-        printf("G/(X,Y,Z) : %d ; %d ; %d\r\n", gyro_data[0], gyro_data[1], gyro_data[2]);
+        printf("XL/(X,Y,Z) [mg] : %d ; %d ; %d\r\n", accel_data[0], accel_data[1], accel_data[2]);
+        printf("G/(X,Y,Z) [mdps] : %d ; %d ; %d\r\n", gyro_data[0], gyro_data[1], gyro_data[2]);
     } else {
         printf("Erreur de lecture du capteur --> ");
         check_device_communication();
