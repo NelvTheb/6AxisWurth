@@ -77,9 +77,9 @@ HAL_StatusTypeDef Read_sensor_data(int16_t* accel_data, int16_t* gyro_data) {
     if (status != HAL_OK) return status;
 
     // Vérifier si les bits XLDA (bit 0) et GDA (bit 1) sont à 1
-    if ((status_reg & 0x01) & (status_reg & 0x02)) {
+    if (!(status_reg & 0x01) & !(status_reg & 0x02)) {
         // Pas de nouvelles données prêtes
-        return HAL_OK;
+        return HAL_ERROR;
     }
 	// Lire les données du gyroscope
 	for (int i = 0; i < 3; i++) {
