@@ -24,6 +24,8 @@
 #define XL_X_OUT_L 0x28            // Adresse du premier registre de sortie accéléromètre (XL_)
 #define ACC_SENSITIVITY_16G 0.488 // Sensibilité pour ±16g
 #define GYRO_SENSITIVITY_2000DPS 70 // Sensibilité pour ±2000 dps
+#define ACC_SENSITIVITY_2G 0.061 // Sensibilité pour ±16g
+#define GYRO_SENSITIVITY_250DPS 8.75 // Sensibilité pour ±2000 dps
 
 void check_device_communication();
 void Init_HighPerf_Mode_6_axis(void);

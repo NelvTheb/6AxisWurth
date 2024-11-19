@@ -31,10 +31,10 @@ void Init_HighPerf_Mode_6_axis(void)
     uint8_t data = 0;
 
     // Activer le mode haute performance pour l'accéléromètre et le gyroscope
-    data = 0x54; // 208 Hz, ±16g pour l'accéléromètre
+    data = 0xA0; // 208 Hz, ±16g pour l'accéléromètre 0x54 (Actuel 6,6 kHz et ±2g)
     HAL_I2C_Mem_Write(&hi2c1, SENSOR_ADDRESS, CTRL1_XL, I2C_MEMADD_SIZE_8BIT, &data, 1, HAL_MAX_DELAY);
 
-    data = 0x4C; // 208 Hz, ±2000 dps pour le gyroscope
+    data = 0xAC; // 208 Hz, ±2000 dps pour le gyroscope 0x4C (Actuel 6,6 kHz et 2000 dps)
     HAL_I2C_Mem_Write(&hi2c1, SENSOR_ADDRESS, CTRL2_G, I2C_MEMADD_SIZE_8BIT, &data, 1, HAL_MAX_DELAY);
 
     // Activer l'incrémentation automatique des adresses et l'update des données
@@ -77,10 +77,16 @@ HAL_StatusTypeDef Read_sensor_data(int16_t* accel_data, int16_t* gyro_data) {
     if (status != HAL_OK) return status;
 
     // Vérifier si les bits XLDA (bit 0) et GDA (bit 1) sont à 1
-    if (!(status_reg & 0x01) & !(status_reg & 0x02)) {
-        // Pas de nouvelles données prêtes
-        return HAL_ERROR;
+//    if ((((status_reg & 0x01)) && (((status_reg) & 0x02)))){
+//        // Pas de nouvelles données prêtes
+//        return HAL_OK;
+//    }else{
+//        return HAL_ERROR;
+//    }
+    if ((status_reg & 0x03) != 0x03) {
+        return HAL_OK; // Pas de nouvelles données prêtes
     }
+
 	// Lire les données du gyroscope
 	for (int i = 0; i < 3; i++) {
 		// Adresses des registres pour chaque axe
@@ -113,7 +119,7 @@ HAL_StatusTypeDef Read_sensor_data(int16_t* accel_data, int16_t* gyro_data) {
 		if (status != HAL_OK) return status;
 
 		// Combiner les octets pour obtenir la valeur 16 bits
-		accel_data[i] = (int16_t)(((high_byte << 8) | low_byte) * ACC_SENSITIVITY_16G);
+		accel_data[i] = (int16_t)(((high_byte << 8) | low_byte) * ACC_SENSITIVITY_2G);
 	}
 
 	return HAL_OK;
@@ -129,7 +135,7 @@ void Display_6_axis_data(void) {
     if (status == HAL_OK) {
         // Afficher les valeurs dans le format demandé
         printf("XL/(X,Y,Z) [mg] : %d ; %d ; %d\r\n", accel_data[0], accel_data[1], accel_data[2]);
-        printf("G/(X,Y,Z) [mdps] : %d ; %d ; %d\r\n", gyro_data[0], gyro_data[1], gyro_data[2]);
+        printf("G/(X,Y,Z) [mdps] : %d; %d; %d\r\n", gyro_data[0], gyro_data[1], gyro_data[2]);
     } else {
         printf("Erreur de lecture du capteur --> ");
         check_device_communication();
