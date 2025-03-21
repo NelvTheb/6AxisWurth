@@ -16,3 +16,5 @@ void TIM2_IRQHandler(void)
   /* USER CODE END TIM2_IRQn 1 */
 }
 ```
+
+Problème réglé -> due à l'initialisation de `Init_HighPerf_Mode_6_axis();` avant l'initialisation de l'i2c.
